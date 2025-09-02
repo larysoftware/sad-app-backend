@@ -7,15 +7,19 @@ namespace App\HomePage\Application\Queries;
 use App\HomePage\Application\DTOs\MessageDTO;
 use App\HomePage\Domain\Repositories\MessageRepositoryInterface;
 
-class GetWelcomeMessageQuery
+class GetMessageByIdQuery
 {
     public function __construct(
         private MessageRepositoryInterface $messageRepository
     ) {}
 
-    public function execute(): MessageDTO
+    public function execute(int $id): ?MessageDTO
     {
-        $message = $this->messageRepository->getWelcomeMessage();
+        $message = $this->messageRepository->findById($id);
+        
+        if ($message === null) {
+            return null;
+        }
         
         return new MessageDTO(
             id: $message->getId(),
